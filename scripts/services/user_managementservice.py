@@ -120,3 +120,90 @@ async def delete_user(request: Request):
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
                                                              'Server': "GLens", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
+
+
+@userService.post(app_constants.UserManagement.diseases_list, tags=["Login Service"])
+async def diseases_list(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.disease_list(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+@userService.post(app_constants.UserManagement.market_trend, tags=["Login Service"])
+async def market_trend(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.market_trends(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+
+@userService.post(app_constants.UserManagement.customer_wise_sales, tags=["Login Service"])
+async def customer_wise_sales(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.customer_wise_sales_trends(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+
+@userService.post(app_constants.UserManagement.chick_trend, tags=["Login Service"])
+async def chick_trend(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.chick_trends(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
