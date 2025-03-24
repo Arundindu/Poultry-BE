@@ -132,3 +132,86 @@ class UserManagement:
         except Exception as e:
             log.error(f"Error occurred while deleting the user due to {e}. Kindly try after sometime")
         return json_object
+
+    def disease_list(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching diseases data','data':[]}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.DISEASES_COLLECTION)
+            if data:
+                for each_data in data:
+                    del each_data['_id']
+                    json_object['data'].append(each_data)
+                json_object['status'] = 'success'
+                json_object['message'] = 'Disease list fetched successfully'
+            else:
+                json_object['status']='failed'
+                json_object['message']='Unable to fetch diseases list'
+
+        except Exception as e:
+            log.error(f"Error occurred while fetching diseases list due to {e}. Kindly try after sometime")
+        return json_object
+
+
+    def market_trends(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching diseases data','data':{'date':[],'seriesData':[]}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.BIRD_PRICE_COLLECTION)
+            if data:
+                for each_data in data:
+                    json_object['data']['date'].append(each_data['date'])
+                    json_object['data']['seriesData'].append(each_data['birdsPrice'])
+                json_object['status'] = 'success'
+                json_object['message'] = 'Disease list fetched successfully'
+            else:
+                json_object['status']='failed'
+                json_object['message']='Unable to fetch diseases list'
+
+        except Exception as e:
+            log.error(f"Error occurred while fetching diseases list due to {e}. Kindly try after sometime")
+        return json_object
+
+
+    def customer_wise_sales_trends(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching diseases data','data':{'date':[],'seriesData':[]}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.BIRD_PRICE_COLLECTION)
+            if data:
+                for each_data in data:
+                    json_object['data']['date'].append(each_data['date'])
+                    json_object['data']['seriesData'].append(each_data['birdsPrice'])
+                json_object['status'] = 'success'
+                json_object['message'] = 'Birds price fetched successfully'
+            else:
+                json_object['status']='failed'
+                json_object['message']='Unable to fetch diseases list'
+
+        except Exception as e:
+            log.error(f"Error occurred while fetching diseases list due to {e}. Kindly try after sometime")
+        return json_object
+
+
+    def chick_trends(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching diseases data','data':{'date':[],'seriesData':[]}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.CHICK_PRICE_COLLECTION)
+            if data:
+                for each_data in data:
+                    json_object['data']['date'].append(each_data['date'])
+                    json_object['data']['seriesData'].append(each_data['chickPrice'])
+                json_object['status'] = 'success'
+                json_object['message'] = 'Chick Prices fetched successfully'
+            else:
+                json_object['status']='failed'
+                json_object['message']='Unable to fetch diseases list'
+
+        except Exception as e:
+            log.error(f"Error occurred while fetching diseases list due to {e}. Kindly try after sometime")
+        return json_object
