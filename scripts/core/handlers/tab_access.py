@@ -247,10 +247,10 @@ class TabManagement:
                 json_object["message"] = "UserName Already exists. Kindly try with different userName"
                 json_object['status'] = 'info'
             else:
-                created_at = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
-                request_data['data']['created_at'] = created_at
-                request_data['data']['user_status'] = 'Active'
-                request_data['data']['failed_attempts'] = 0
+                createdAt = datetime.now().strftime("%Y-%m-%dT%H:%M:%S")
+                request_data['data']['createdAt'] = createdAt
+                request_data['data']['userStatus'] = 'Active'
+                request_data['data']['failedAttempts'] = 0
                 request_data['data']['userType'] = request_data['data']['userType'].capitalize()
                 status = mongo_obj.insert_record(request_data['data'], database=app_configuration.MONGO_DATABASE,
                                                  collection=app_configuration.MONGO_COLLECTION)
@@ -576,4 +576,52 @@ class TabManagement:
             json_object['message'] = 'Data deleted successfully'
         except Exception as e:
             log.error(f"Error occurred while deleting due to {e}. Kindly try after sometime")
+        return json_object
+
+    def blockedUsersTable(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error occurred while unblocking the user','tableData':{'headerContent':[],'bodyContent':[],'actions':{}}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.MONGO_COLLECTION)
+            header = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.MONGO_TAB_JSON_COLLECTION)
+            json_object['tableData']['headerContent'].extend(header[0]['blockedUsersTableContent']['headerContent'])
+            json_object['tableData']['actions']=(header[0]['blockedUsersTableContent']['actions'])
+            filtered_data = []
+            if data:
+                mongo_data = data
+                for each_data in mongo_data:
+                    # del each_data['_id'],each_data['password']
+                    if(each_data['failedAttempts'] >=3):
+                        filtered_data.append({
+                            "userName": each_data.get("userName"),
+                            "failedAttempts": each_data.get("failedAttempts")
+                        })
+            json_object['tableData']['bodyContent'] = filtered_data
+            json_object['status'] = 'success'
+            json_object['message'] = 'Table data fetched Successfully'
+        except Exception as e:
+            log.error("Error occurred while unblocking user due to " + str(e))
+        return json_object
+
+    def dashboardTableData(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error occurred while fetching table data','tableData':{'headerContent':[],'bodyContent':[],'actions':{}}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.SALES_COLLECTION)
+            header = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.MONGO_TAB_JSON_COLLECTION)
+            json_object['tableData']['headerContent'].extend(header[0]['dashboardTableContent']['headerContent'])
+            json_object['tableData']['actions']=(header[0]['dashboardTableContent']['actions'])
+            if data:
+                mongo_data = data
+                for each_data in mongo_data:
+                    del each_data['_id']
+                    json_object['tableData']['bodyContent'].append(each_data)
+            json_object['status'] = 'success'
+            json_object['message'] = 'Table data fetched Successfully'
+        except Exception as e:
+            log.error("Error occurred while fetching table data due to " + str(e))
         return json_object
