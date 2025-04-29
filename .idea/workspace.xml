@@ -5,16 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="1b12f0fe-f979-42f8-8d73-c781982f372c" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/Poultry-BE.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/conf/application.conf" beforeDir="false" afterPath="$PROJECT_DIR$/conf/application.conf" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/logs/glens_user_management.log" beforeDir="false" afterPath="$PROJECT_DIR$/logs/glens_user_management.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/constants/app_configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/constants/app_configuration.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/constants/app_constants.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/constants/app_constants.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/core/handlers/tab_access.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/core/handlers/tab_access.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/scripts/core/handlers/user_managementhandler.py" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/core/handlers/user_managementhandler.py" afterDir="false" />
@@ -124,9 +116,14 @@
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/scripts/core/handlers/tab_access.py</url>
-          <line>61</line>
-          <option name="timeStamp" value="5" />
+          <url>file://$PROJECT_DIR$/scripts/core/handlers/user_managementhandler.py</url>
+          <line>219</line>
+          <option name="timeStamp" value="8" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/scripts/utils/mongoUtility.py</url>
+          <line>81</line>
+          <option name="timeStamp" value="9" />
         </line-breakpoint>
       </breakpoints>
       <default-breakpoints>

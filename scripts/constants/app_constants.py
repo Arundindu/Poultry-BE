@@ -41,9 +41,12 @@ class UserManagement:
     chick_price_table_data = '/chickPriceTableData'
     mortality_table_data = '/mortalityTableData'
     diseases_table_data = '/diseasesTableData'
+    blockedUsers_table_data = '/blockedUsersTableData'
+    dashboard_table_data = '/dashboardTableData'
 
     # SettingsTabDelete
     delete_settings_tab_details = '/deleteSettingsTabDetails'
+    unblock_user = '/unBlockUser'
 
 
 

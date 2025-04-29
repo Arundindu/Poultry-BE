@@ -23,7 +23,7 @@ async def add_user_data(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -31,7 +31,7 @@ async def add_user_data(request: Request):
         log.error("Exception occurred while adding the user " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -45,7 +45,7 @@ async def login_user(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -53,7 +53,7 @@ async def login_user(request: Request):
         log.error("Exception occurred while adding the user " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -67,7 +67,7 @@ async def activate_user(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -75,7 +75,7 @@ async def activate_user(request: Request):
         log.error("Exception occurred while adding the user " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -89,7 +89,7 @@ async def deActivate_user(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -97,7 +97,7 @@ async def deActivate_user(request: Request):
         log.error("Exception occurred while adding the user " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 @userService.post(app_constants.UserManagement.delete_user, tags=["Login Service"])
@@ -110,7 +110,7 @@ async def delete_user(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -118,7 +118,7 @@ async def delete_user(request: Request):
         log.error("Exception occurred while adding the user " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -132,7 +132,7 @@ async def diseases_list(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -140,7 +140,7 @@ async def diseases_list(request: Request):
         log.error("Exception occurred while fetching diseases due to " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 @userService.post(app_constants.UserManagement.market_trend, tags=["Login Service"])
@@ -153,7 +153,7 @@ async def market_trend(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -161,7 +161,7 @@ async def market_trend(request: Request):
         log.error("Exception occurred while fetching diseases due to " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -175,7 +175,7 @@ async def customer_wise_sales(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -183,7 +183,7 @@ async def customer_wise_sales(request: Request):
         log.error("Exception occurred while fetching diseases due to " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
 
@@ -197,7 +197,7 @@ async def chick_trend(request: Request):
 
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
-                                          'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                           'Access-Control-Allow-Origin': '*'})
         return resp
 
@@ -205,5 +205,27 @@ async def chick_trend(request: Request):
         log.error("Exception occurred while fetching diseases due to " + str(e))
         resp = {'status': 'failed'}
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
-                                                             'Server': "GLens", 'X-Content-Type-Options': "nosniff",
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+
+@userService.post(app_constants.UserManagement.unblock_user, tags=["Login Service"])
+async def unblock_user(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.unblock_user(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
