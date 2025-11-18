@@ -625,3 +625,16 @@ class TabManagement:
         except Exception as e:
             log.error("Error occurred while fetching table data due to " + str(e))
         return json_object
+
+    def side_bar_data(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error occurred while fetching data','data':[]}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.USER_ACCESS_COLLECTION)
+            json_object['data']=data[0]['accessData'][request_data['userType'].lower()]
+            json_object['status'] = 'success'
+            json_object['message'] = 'Table data fetched Successfully'
+        except Exception as e:
+            log.error("Error occurred while fetching table data due to " + str(e))
+        return json_object

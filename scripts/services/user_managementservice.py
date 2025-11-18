@@ -229,3 +229,42 @@ async def unblock_user(request: Request):
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
                                                              'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
+
+@userService.get(app_constants.UserManagement.get_user_role_page_data, tags=["Login Service"])
+async def get_user_role_page_data(request: Request):
+    try:
+        response = user_service.get_user_role_data()
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+@userService.post(app_constants.UserManagement.set_user_role_page_data, tags=["Login Service"])
+async def set_user_role_page_data(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.set_user_role_data(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}

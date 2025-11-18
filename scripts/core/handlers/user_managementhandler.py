@@ -40,7 +40,7 @@ class UserManagement:
         return json_object
 
     def login_user(self, request_data):
-        json_object = {'status': 'failed', 'message': 'Error Occurred while validating data'}
+        json_object = {'status': 'failed', 'message': 'Error Occurred while validating data','data':{}}
         try:
             user_name = request_data['userName']
             password = request_data['password']
@@ -57,6 +57,9 @@ class UserManagement:
                                             collection=app_configuration.MONGO_COLLECTION)
                 json_object['status'] = 'success'
                 json_object['message'] = 'User logged in successfully'
+                json_object['data']['userName'] = mongo_data['userName']
+                json_object['data']['userType'] = mongo_data['userType']
+                json_object['data']['eMail'] = mongo_data['eMail']
                 return json_object
             user_inactive_query = {'userName': user_name, "password": password, 'userStatus': 'InActive'}
             inactive_user_data = mongo_obj.fetch_records(query=user_inactive_query,
@@ -232,4 +235,34 @@ class UserManagement:
         except Exception as e:
             log.error(f"Error occurred while adding user due to {e}. Kindly try after sometime")
 
+        return json_object
+
+    def get_user_role_data(self):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data','data':{}}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.USER_ACCESS_COLLECTION)
+            json_object['data']=data[0]['accessData']
+            json_object['status']= 'success'
+            json_object['message']= 'User unblocked successfully'
+        except Exception as e:
+            log.error(f"Error occurred while adding user due to {e}. Kindly try after sometime")
+        return json_object
+
+    def set_user_role_data(self,request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
+        try:
+            mongo_query = {}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.USER_ACCESS_COLLECTION)
+            if data :
+                update_operation = {"$set": {f"accessData.{request_data['key']}": request_data[request_data['key']]}}
+                mongo_obj.update_one_record({"_id":data[0]["_id"]},update_operation,
+                                            database=app_configuration.MONGO_DATABASE,
+                                            collection=app_configuration.USER_ACCESS_COLLECTION)
+            json_object['status']= 'success'
+            json_object['message']= 'Data updated successfully'
+        except Exception as e:
+            log.error(f"Error occurred while adding user due to {e}. Kindly try after sometime")
         return json_object

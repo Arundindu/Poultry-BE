@@ -16,6 +16,7 @@ class UserManagement:
     market_trend = '/marketTrend'
     customer_wise_sales = '/customerWiseSales'
     chick_trend = '/chickTrend'
+    get_side_bar_data = '/getSideBarData'
 
     # Setting Tabs Save
     save_bird_price = '/birdsPriceData'
@@ -43,6 +44,8 @@ class UserManagement:
     diseases_table_data = '/diseasesTableData'
     blockedUsers_table_data = '/blockedUsersTableData'
     dashboard_table_data = '/dashboardTableData'
+    get_user_role_page_data = '/getUserRolePageData'
+    set_user_role_page_data = '/setUserRolePageData'
 
     # SettingsTabDelete
     delete_settings_tab_details = '/deleteSettingsTabDetails'
@@ -66,7 +69,7 @@ settingsTabMapping = {
     'sales': app_configuration.SALES_COLLECTION,
     'sheds': app_configuration.SHEDS_COLLECTION,
     'userSetup': app_configuration.MONGO_COLLECTION,
-    'userRoleSetup': ''
+    'userRoleSetup': app_configuration.USER_ACCESS_COLLECTION
 }
 settingsKeyMapping = {
     'birdsPrice': 'date',
