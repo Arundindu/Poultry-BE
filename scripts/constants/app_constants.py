@@ -46,6 +46,7 @@ class UserManagement:
     dashboard_table_data = '/dashboardTableData'
     get_user_role_page_data = '/getUserRolePageData'
     set_user_role_page_data = '/setUserRolePageData'
+    push_notification = '/pushNotification'
 
     # SettingsTabDelete
     delete_settings_tab_details = '/deleteSettingsTabDetails'
@@ -85,4 +86,10 @@ settingsKeyMapping = {
     'sheds': 'shedName',
     'userSetup': 'userName',
     'userRoleSetup': ''
+}
+VAPID_PRIVATE_KEY = "2RyMboKl-JflKcZSBFx7_t13cAhYdSKw6NCOP_m2n9s"
+VAPID_PUBLIC_KEY = "BCTeAlAt_DnLbz7ka22t4DARmnUq7Ts0NxYNYgVPVgym77Y8b82U9EqDTbabwIZWmtGV510xJ07E_vtAY7tCg34"
+
+VAPID_CLAIMS = {
+    "sub": "mailto:reddyarunkumar807@gmail.com"
 }

@@ -1,8 +1,10 @@
 from datetime import datetime
+import json
 
-from scripts.constants import app_configuration
+from scripts.constants import app_configuration, app_constants
 from scripts.logging.log_module import logger as log
 from scripts.utils.mongoUtility import MongoDBUtility
+from pywebpush import webpush, WebPushException
 
 mongo_obj = MongoDBUtility(uri=app_configuration.MONGO_HOST)
 
@@ -10,12 +12,12 @@ mongo_obj = MongoDBUtility(uri=app_configuration.MONGO_HOST)
 class UserManagement:
 
     def __int__(self):
-        print("Initalising")
+        print("Initialising")
         # self.mongo_obj = Mongo_DBUtility(app_configuration.MONGO_DATABASE, app_configuration.MONGO_COLLECTION)
 
     def add_user(self, request_data):
         # columns = ["username", "email", "phone_number", "user_type", "created_at", "updated_at",
-        #            "status", "last_login",'failed_attempts"]
+        #            "status", "last_login","failed_attempts"]
         json_object = {'status': 'failed', 'message': 'Error Occurred while saving data'}
         try:
             mongo_query = {'userName': request_data['userName']}
@@ -265,4 +267,32 @@ class UserManagement:
             json_object['message']= 'Data updated successfully'
         except Exception as e:
             log.error(f"Error occurred while adding user due to {e}. Kindly try after sometime")
+        return json_object
+
+    def push_notify(self,request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
+        # ---------------- PUSH NOTIFICATION TRIGGER ----------------
+        try:
+            subscription_info = request_data["subscription"]
+
+            payload = json.dumps({
+                "title": "Update Successful",
+                "body": f"{request_data['key']} updated"
+                # "icon": "/icons/icon-192.png"
+            })
+
+            webpush(
+                subscription_info,
+                data=payload,
+                vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+                vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
+                vapid_claims=app_constants.VAPID_CLAIMS
+            )
+            json_object['status'] = 'success'
+            json_object['message'] = 'Notification sent successfully'
+
+        except WebPushException as exc:
+            log.error(f"Push notification error: {exc}")
+        # -----------------------------------------------------------
+
         return json_object
