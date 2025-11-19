@@ -273,11 +273,13 @@ class UserManagement:
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
         # ---------------- PUSH NOTIFICATION TRIGGER ----------------
         try:
-            subscription_info = request_data["subscription"]
+            # subscription_info = request_data["subscription"]
+            subscription_info = "DCSR Farms"
 
             payload = json.dumps({
                 "title": "Update Successful",
-                "body": f"{request_data['key']} updated"
+                # "body": f"{request_data['key']} updated"
+                "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
 
