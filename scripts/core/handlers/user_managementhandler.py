@@ -275,11 +275,12 @@ class UserManagement:
         try:
             log.info(request_data)
             subscription_info = request_data["subscription"]
+            # subscription_info = "DCSR Farms"
 
             payload = json.dumps({
-                "title": request_data["notificationData"]["title"],
-                "body": f"{request_data['notificationData']['message']} updated"
-                # "body": f"UPDATE updated"
+                "title": "Update Successful",
+                # "body": f"{request_data['key']} updated"
+                "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
 
@@ -287,6 +288,7 @@ class UserManagement:
                 subscription_info,
                 data=payload,
                 vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+                # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
                 vapid_claims=app_constants.VAPID_CLAIMS
             )
             json_object['status'] = 'success'
