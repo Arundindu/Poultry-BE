@@ -282,12 +282,13 @@ class UserManagement:
                 "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
+            log(request_data)
 
             webpush(
                 subscription_info,
                 data=payload,
                 vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-                vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
+                # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
                 vapid_claims=app_constants.VAPID_CLAIMS
             )
             json_object['status'] = 'success'
