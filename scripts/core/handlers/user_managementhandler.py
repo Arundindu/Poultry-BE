@@ -282,7 +282,7 @@ class UserManagement:
                 "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
-            log(request_data)
+            # log.log(request_data)
 
             webpush(
                 subscription_info,
