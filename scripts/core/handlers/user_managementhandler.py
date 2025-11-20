@@ -276,8 +276,11 @@ class UserManagement:
             data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.SUBSCRIPTIONS)
             if data:
+                log.info(data)
                 for each_data in data[0]:
+                    log.info(each_data)
                     for each in each_data['subscriptions']:
+                        log.info(each)
                         subscription_info = each
 
                         payload = json.dumps({
@@ -286,6 +289,7 @@ class UserManagement:
                             # "body": f"UPDATE updated"
                             # "icon": "/icons/icon-192.png"
                         })
+                        log.info(subscription_info)
 
                         webpush(
                             subscription_info,
@@ -310,8 +314,6 @@ class UserManagement:
             data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.SUBSCRIPTIONS)
             if data:
-                log.info(data,request_data)
-                # data['subscription'].append(request_data['subscription'])
                 # subscription = {
                 #     'userName': request_data['userName'],
                 #     'subscription':[request_data['subscription']]
@@ -321,11 +323,9 @@ class UserManagement:
                         "subscription": request_data["subscription"]
                         }
                 }
-                log.info(update_operation)
-                status = mongo_obj.update_one_record({'userName':request_data['userName']}, update_operation,
+                mongo_obj.update_one_record({'userName':request_data['userName']}, update_operation,
                                             database=app_configuration.MONGO_DATABASE,
                                             collection=app_configuration.SUBSCRIPTIONS)
-                # if status:
                 json_object['message'] = 'Successfully subscribed'
                 json_object['status'] = 'success'
             else:
