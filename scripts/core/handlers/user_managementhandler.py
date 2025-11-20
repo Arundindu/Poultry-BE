@@ -307,8 +307,18 @@ class UserManagement:
                                            collection=app_configuration.SUBSCRIPTIONS)
             if data:
                 log.info(data,request_data)
-                # json_object["message"] = "UserName Already exists. Kindly try with different userName"
-                # json_object['status'] = 'info'
+                # data['subscription'].append(request_data['subscription'])
+                # subscription = {
+                #     'userName': request_data['userName'],
+                #     'subscription':[request_data['subscription']]
+                # }
+                update_operation = {"$set": {data['subscription']: data['subscription'].append(request_data['subscription'])}}
+                status = mongo_obj.update_one_record({'userName':request_data['userName']}, update_operation,
+                                            database=app_configuration.MONGO_DATABASE,
+                                            collection=app_configuration.SUBSCRIPTIONS)
+                if status:
+                    json_object['message'] = 'Successfully subscribed'
+                    json_object['status'] = 'success'
             else:
                 subscription = {
                     'userName': request_data['userName'],
