@@ -277,7 +277,7 @@ class UserManagement:
                                            collection=app_configuration.SUBSCRIPTIONS)
             if data:
                 log.info(data)
-                for each_data in data[0]:
+                for each_data in data:
                     log.info(each_data)
                     for each in each_data['subscriptions']:
                         log.info(each)
