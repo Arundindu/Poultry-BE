@@ -296,7 +296,7 @@ class UserManagement:
                             vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
                             vapid_claims=app_constants.VAPID_CLAIMS
                         )
-                        time.sleep(1)
+                        time.sleep(3)
             json_object['status'] = 'success'
             json_object['message'] = 'Notification sent successfully'
 
