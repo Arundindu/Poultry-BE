@@ -312,7 +312,12 @@ class UserManagement:
                 #     'userName': request_data['userName'],
                 #     'subscription':[request_data['subscription']]
                 # }
-                update_operation = {"$set": {'subscription': data[0]['subscription'].append(request_data['subscription'])}}
+                update_operation = {
+                    "$push": {
+                        "subscription": request_data["subscription"]
+                        }
+                }
+                log.info(update_operation)
                 status = mongo_obj.update_one_record({'userName':request_data['userName']}, update_operation,
                                             database=app_configuration.MONGO_DATABASE,
                                             collection=app_configuration.SUBSCRIPTIONS)
