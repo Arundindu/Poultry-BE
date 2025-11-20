@@ -1,6 +1,6 @@
 from datetime import datetime
 import json
-
+import time
 from scripts.constants import app_configuration, app_constants
 from scripts.logging.log_module import logger as log
 from scripts.utils.mongoUtility import MongoDBUtility
@@ -298,6 +298,7 @@ class UserManagement:
                             # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
                             vapid_claims=app_constants.VAPID_CLAIMS
                         )
+                        time.sleep(5)
             json_object['status'] = 'success'
             json_object['message'] = 'Notification sent successfully'
 
