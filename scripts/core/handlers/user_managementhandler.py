@@ -271,7 +271,6 @@ class UserManagement:
 
     def push_notify(self,request_data):
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
-        # ---------------- PUSH NOTIFICATION TRIGGER ----------------
         try:
             data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.SUBSCRIPTIONS)
@@ -295,10 +294,9 @@ class UserManagement:
                             subscription_info,
                             data=payload,
                             vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-                            # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
                             vapid_claims=app_constants.VAPID_CLAIMS
                         )
-                        time.sleep(5)
+                        time.sleep(1)
             json_object['status'] = 'success'
             json_object['message'] = 'Notification sent successfully'
 
@@ -315,10 +313,6 @@ class UserManagement:
             data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.SUBSCRIPTIONS)
             if data:
-                # subscription = {
-                #     'userName': request_data['userName'],
-                #     'subscription':[request_data['subscription']]
-                # }
                 update_operation = {
                     "$push": {
                         "subscription": request_data["subscription"]
