@@ -278,8 +278,8 @@ class UserManagement:
 
             payload = json.dumps({
                 "title": "Update Successful",
-                # "body": f"{request_data['key']} updated"
-                "body": f"UPDATE updated"
+                "body": f"{request_data['notificationData']['message']} updated"
+                # "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
 
