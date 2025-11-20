@@ -277,8 +277,8 @@ class UserManagement:
             subscription_info = request_data["subscription"]
 
             payload = json.dumps({
-                "title": "Update Successful",
-                "body": f"{request_data['notificationData']['message']} updated"
+                "title": f"{request_data['notificationData']['title']}",
+                "body": f"{request_data['notificationData']['message']}"
                 # "body": f"UPDATE updated"
                 # "icon": "/icons/icon-192.png"
             })
