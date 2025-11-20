@@ -273,23 +273,27 @@ class UserManagement:
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
         # ---------------- PUSH NOTIFICATION TRIGGER ----------------
         try:
-            log.info(request_data)
-            subscription_info = request_data["subscription"]
+            data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.SUBSCRIPTIONS)
+            if data:
+                for each_data in data[0]:
+                    for each in each_data['subscriptions']:
+                        subscription_info = each
 
-            payload = json.dumps({
-                "title": f"{request_data['notificationData']['title']}",
-                "body": f"{request_data['notificationData']['message']}"
-                # "body": f"UPDATE updated"
-                # "icon": "/icons/icon-192.png"
-            })
+                        payload = json.dumps({
+                            "title": f"{request_data['notificationData']['title']}",
+                            "body": f"{request_data['notificationData']['message']}"
+                            # "body": f"UPDATE updated"
+                            # "icon": "/icons/icon-192.png"
+                        })
 
-            webpush(
-                subscription_info,
-                data=payload,
-                vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-                # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
-                vapid_claims=app_constants.VAPID_CLAIMS
-            )
+                        webpush(
+                            subscription_info,
+                            data=payload,
+                            vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+                            # vapid_public_key=app_constants.VAPID_PUBLIC_KEY,
+                            vapid_claims=app_constants.VAPID_CLAIMS
+                        )
             json_object['status'] = 'success'
             json_object['message'] = 'Notification sent successfully'
 
@@ -321,9 +325,9 @@ class UserManagement:
                 status = mongo_obj.update_one_record({'userName':request_data['userName']}, update_operation,
                                             database=app_configuration.MONGO_DATABASE,
                                             collection=app_configuration.SUBSCRIPTIONS)
-                if status:
-                    json_object['message'] = 'Successfully subscribed'
-                    json_object['status'] = 'success'
+                # if status:
+                json_object['message'] = 'Successfully subscribed'
+                json_object['status'] = 'success'
             else:
                 subscription = {
                     'userName': request_data['userName'],
