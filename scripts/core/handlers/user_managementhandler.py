@@ -279,7 +279,7 @@ class UserManagement:
                 log.info(data)
                 for each_data in data:
                     log.info(each_data)
-                    for each in each_data['subscriptions']:
+                    for each in each_data['subscription']:
                         log.info(each)
                         subscription_info = each
 
