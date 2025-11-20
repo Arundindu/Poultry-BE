@@ -312,7 +312,7 @@ class UserManagement:
             else:
                 subscription = {
                     'userName': request_data['userName'],
-                    'subscription':request_data['subscription']
+                    'subscription':[request_data['subscription']]
                 }
                 status = mongo_obj.insert_record(subscription, database=app_configuration.MONGO_DATABASE,
                                                  collection=app_configuration.SUBSCRIPTIONS)
