@@ -298,3 +298,28 @@ class UserManagement:
         # -----------------------------------------------------------
 
         return json_object
+
+    def store_subscription(self,request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
+        try:
+            mongo_query = {'userName': request_data['userName']}
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.SUBSCRIPTIONS)
+            if data:
+                log.info(data,request_data)
+                # json_object["message"] = "UserName Already exists. Kindly try with different userName"
+                # json_object['status'] = 'info'
+            else:
+                subscription = {
+                    'userName': request_data['userName'],
+                    'subscription':request_data['subscription']
+                }
+                status = mongo_obj.insert_record(subscription, database=app_configuration.MONGO_DATABASE,
+                                                 collection=app_configuration.SUBSCRIPTIONS)
+                if status:
+                    json_object['message'] = 'Successfully subscribed'
+                    json_object['status'] = 'success'
+        except Exception as e:
+            log.error(f"Error occurred while adding subscription due to {e}. Kindly try after sometime")
+
+        return json_object

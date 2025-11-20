@@ -27,7 +27,6 @@ class UserManagement:
     feed_consumption_data = '/feedConsumptionData'
     user_setup_data = '/userSetupData'
     sheds_data='/shedsData'
-    order_hens_data='/orderHensData'
     chick_price_data='/chickPriceData'
     mortality_data='/mortalityData'
     diseases_data='/diseasesData'
@@ -47,6 +46,7 @@ class UserManagement:
     get_user_role_page_data = '/getUserRolePageData'
     set_user_role_page_data = '/setUserRolePageData'
     push_notification = '/pushNotification'
+    store_subscription = '/storeSubscription'
 
     # SettingsTabDelete
     delete_settings_tab_details = '/deleteSettingsTabDetails'

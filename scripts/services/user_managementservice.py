@@ -289,3 +289,24 @@ async def push_notification(request: Request):
         return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
                                                              'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
+
+@userService.post(app_constants.UserManagement.store_subscription, tags=["Login Service"])
+async def store_subscription(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = user_service.store_subscription(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while fetching diseases due to " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
