@@ -328,7 +328,7 @@ class UserManagement:
                 return True
 
             except WebPushException as exc:
-                status = exc.response.status_code if exc.response else None
+                status = exc.response.status_code
                 log.error(f"WebPush error ({status}) on attempt {attempt + 1}: {exc}")
                 # Handle expired subscription
                 if status in [404, 410]:
