@@ -1,7 +1,7 @@
 import base64
 import json
 
-from fastapi import APIRouter, Request
+from fastapi import APIRouter, Request, BackgroundTasks
 from fastapi.responses import PlainTextResponse
 
 from scripts.constants import app_constants
@@ -270,13 +270,20 @@ async def set_user_role_page_data(request: Request):
                                                              'Access-Control-Allow-Origin': '*'}
 
 @userService.post(app_constants.UserManagement.push_notification, tags=["Login Service"])
-async def push_notification(request: Request):
+async def push_notification(request: Request,background_tasks: BackgroundTasks):
     try:
         input_data = await request.body()
         json_string = base64.b64decode(input_data)
         json_object = json.loads(json_string)
-        response = user_service.push_notify(json_object)
+        # response = user_service.push_notify(json_object)
+        # Add background task
+        background_tasks.add_task(user_service.push_notify, json_object)
 
+        # Send immediate response
+        response = {
+            'status': 'success',
+            'message': 'Notification queued successfully'
+        }
         resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
                                  headers={'Content-Type': 'text/plain; charset=utf-8',
                                           'Server': "DCSR", 'X-Content-Type-Options': "nosniff",

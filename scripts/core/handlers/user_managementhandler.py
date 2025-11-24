@@ -270,41 +270,85 @@ class UserManagement:
         return json_object
 
     def push_notify(self,request_data):
-        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
-        try:
-            data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
-                                           collection=app_configuration.SUBSCRIPTIONS)
-            if data:
-                log.info(data)
-                for each_data in data:
-                    log.info(each_data)
-                    for each in each_data['subscription']:
-                        log.info(each)
-                        subscription_info = each
-
-                        payload = json.dumps({
-                            "title": f"{request_data['notificationData']['title']}",
-                            "body": f"{request_data['notificationData']['message']}"
-                            # "body": f"UPDATE updated"
-                            # "icon": "/icons/icon-192.png"
-                        })
-                        log.info(subscription_info)
-
-                        webpush(
-                            subscription_info,
-                            data=payload,
-                            vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-                            vapid_claims=app_constants.VAPID_CLAIMS
-                        )
-                        time.sleep(3)
-            json_object['status'] = 'success'
-            json_object['message'] = 'Notification sent successfully'
-
-        except WebPushException as exc:
-            log.error(f"Push notification error: {exc}")
+        # json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
+        # try:
+        #     data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
+        #                                    collection=app_configuration.SUBSCRIPTIONS)
+        #     if data:
+        #         for each_data in data:
+        #             for each in each_data['subscription']:
+        #                 subscription_info = each
+        #                 payload = json.dumps({
+        #                     "title": f"{request_data['notificationData']['title']}",
+        #                     "body": f"{request_data['notificationData']['message']}"
+        #                     # "body": f"UPDATE updated"
+        #                     # "icon": "/icons/icon-192.png"
+        #                 })
+        #                 webpush(
+        #                     subscription_info,
+        #                     data=payload,
+        #                     vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+        #                     vapid_claims=app_constants.VAPID_CLAIMS
+        #                 )
+        #                 time.sleep(3)
+        #     json_object['status'] = 'success'
+        #     json_object['message'] = 'Notification sent successfully'
+        #
+        # except WebPushException as exc:
+        #     log.error(f"Push notification error: {exc}")
         # -----------------------------------------------------------
+        # return json_object
 
-        return json_object
+        try:
+            data = mongo_obj.fetch_records(
+                query={},
+                database=app_configuration.MONGO_DATABASE,
+                collection=app_configuration.SUBSCRIPTIONS
+            )
+
+            if not data:
+                return
+
+            payload = json.dumps({
+                "title": request_data['notificationData']['title'],
+                "body": request_data['notificationData']['message']
+            })
+
+            for each_data in data:
+                for subscription_info in each_data['subscription']:
+                    # Call retry wrapper
+                    self.send_push_with_retry(subscription_info, payload)
+
+        except Exception as e:
+            log.error(f"Background push error: {e}")
+
+    def send_push_with_retry(self, subscription_info, payload, retries=4):
+        for attempt in range(retries):
+            try:
+                webpush(
+                    subscription_info=subscription_info,
+                    data=payload,
+                    vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+                    vapid_claims=app_constants.VAPID_CLAIMS
+                )
+                return True
+
+            except WebPushException as exc:
+                log.error(f"WebPush error on attempt {attempt + 1}: {exc}")
+
+                # Retry for 429/503 or network issue
+                if exc.response and exc.response.status_code in [429, 503]:
+                    time.sleep(1.2)
+                    continue
+                else:
+                    # Other error — break
+                    return False
+
+            except Exception as e:
+                log.error(f"Unexpected push error: {e}")
+                time.sleep(1)
+                continue
+        return False
 
     def store_subscription(self,request_data):
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
