@@ -275,7 +275,6 @@ async def push_notification(request: Request,background_tasks: BackgroundTasks):
         input_data = await request.body()
         json_string = base64.b64decode(input_data)
         json_object = json.loads(json_string)
-        log.info(json_object)
         # response = user_service.push_notify(json_object)
         # Add background task
         background_tasks.add_task(user_service.push_notify, json_object)
