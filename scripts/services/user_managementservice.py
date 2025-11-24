@@ -272,6 +272,7 @@ async def set_user_role_page_data(request: Request):
 @userService.post(app_constants.UserManagement.push_notification, tags=["Login Service"])
 async def push_notification(request: Request,background_tasks: BackgroundTasks):
     try:
+        log.info(request)
         input_data = await request.body()
         json_string = base64.b64decode(input_data)
         json_object = json.loads(json_string)
