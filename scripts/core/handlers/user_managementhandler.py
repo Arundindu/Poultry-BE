@@ -269,87 +269,6 @@ class UserManagement:
             log.error(f"Error occurred while adding user due to {e}. Kindly try after sometime")
         return json_object
 
-    def push_notify(self,request_data):
-        # json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
-        # try:
-        #     data = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
-        #                                    collection=app_configuration.SUBSCRIPTIONS)
-        #     if data:
-        #         for each_data in data:
-        #             for each in each_data['subscription']:
-        #                 subscription_info = each
-        #                 payload = json.dumps({
-        #                     "title": f"{request_data['notificationData']['title']}",
-        #                     "body": f"{request_data['notificationData']['message']}"
-        #                     # "body": f"UPDATE updated"
-        #                     # "icon": "/icons/icon-192.png"
-        #                 })
-        #                 webpush(
-        #                     subscription_info,
-        #                     data=payload,
-        #                     vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-        #                     vapid_claims=app_constants.VAPID_CLAIMS
-        #                 )
-        #                 time.sleep(3)
-        #     json_object['status'] = 'success'
-        #     json_object['message'] = 'Notification sent successfully'
-        #
-        # except WebPushException as exc:
-        #     log.error(f"Push notification error: {exc}")
-        # -----------------------------------------------------------
-        # return json_object
-
-        try:
-            data = mongo_obj.fetch_records(
-                query={},
-                database=app_configuration.MONGO_DATABASE,
-                collection=app_configuration.SUBSCRIPTIONS
-            )
-
-            if not data:
-                return
-
-            payload = json.dumps({
-                "title": request_data['notificationData']['title'],
-                "body": request_data['notificationData']['message']
-            })
-
-            for each_data in data:
-                for subscription_info in each_data['subscription']:
-                    # Call retry wrapper
-                    self.send_push_with_retry(subscription_info, payload)
-
-        except Exception as e:
-            log.error(f"Background push error: {e}")
-
-    def send_push_with_retry(self, subscription_info, payload, retries=4):
-        for attempt in range(retries):
-            try:
-                webpush(
-                    subscription_info=subscription_info,
-                    data=payload,
-                    vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
-                    vapid_claims=app_constants.VAPID_CLAIMS
-                )
-                return True
-
-            except WebPushException as exc:
-                log.error(f"WebPush error on attempt {attempt + 1}: {exc}")
-
-                # Retry for 429/503 or network issue
-                if exc.response and exc.response.status_code in [429, 503]:
-                    time.sleep(1.2)
-                    continue
-                else:
-                    # Other error — break
-                    return False
-
-            except Exception as e:
-                log.error(f"Unexpected push error: {e}")
-                time.sleep(1)
-                continue
-        return False
-
     def store_subscription(self,request_data):
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching data'}
         try:
@@ -381,3 +300,60 @@ class UserManagement:
             log.error(f"Error occurred while adding subscription due to {e}. Kindly try after sometime")
 
         return json_object
+
+    def push_notify(self,request_data):
+        try:
+            data = mongo_obj.fetch_records(query={},database=app_configuration.MONGO_DATABASE,collection=app_configuration.SUBSCRIPTIONS)
+            if not data:
+                return
+            payload = json.dumps({
+                "title": request_data['notificationData']['title'],
+                "body": request_data['notificationData']['message']
+            })
+            for each_data in data:
+                for subscription_info in each_data['subscription']:
+                    self.send_push_with_retry(subscription_info, payload)
+        except Exception as e:
+            log.error(f"Background push error: {e}")
+
+    def send_push_with_retry(self, subscription_info, payload, retries=4):
+        for attempt in range(retries):
+            try:
+                webpush(
+                    subscription_info=subscription_info,
+                    data=payload,
+                    vapid_private_key=app_constants.VAPID_PRIVATE_KEY,
+                    vapid_claims=app_constants.VAPID_CLAIMS
+                )
+                return True
+
+            except WebPushException as exc:
+                status = exc.response.status_code if exc.response else None
+                log.error(f"WebPush error ({status}) on attempt {attempt + 1}: {exc}")
+                # Handle expired subscription
+                if status in [404, 410]:
+                    self.remove_subscription(subscription_info)
+                    return False
+                # Handle rate limits or temporary failure
+                if status in [429, 503]:
+                    time.sleep(1)
+                    continue
+                else:
+                    return False
+            except Exception as e:
+                log.error(f"Unexpected push error: {e}")
+                time.sleep(1)
+                continue
+        return False
+
+    def remove_subscription(self, subscription_info):
+        try:
+            mongo_obj.update_records(
+                query={"subscription": {"$elemMatch": {"endpoint": subscription_info["endpoint"]}}},
+                update_values={"$pull": {"subscription": {"endpoint": subscription_info["endpoint"]}}},
+                database=app_configuration.MONGO_DATABASE,
+                collection=app_configuration.SUBSCRIPTIONS
+            )
+            log.info(f"Removed expired subscription: {subscription_info['endpoint']}")
+        except Exception as e:
+            log.error(f"Error removing expired subscription: {e}")

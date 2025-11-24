@@ -60,16 +60,30 @@ class MongoDBUtility:
             print(f"Failed to fetch records: {e}")
         return list(records)
 
-    def update_records(self, query, update_values,database,collection):
+    # def update_records(self, query, update_values,database,collection):
+    #     """
+    #     Update records in the collection based on a query.
+    #     """
+    #     try:
+    #         database_name = database
+    #         collection_name = collection
+    #         db = self.client[database_name]
+    #         collection = db[collection_name]
+    #         result = collection.update_many(query, {"$set": update_values})
+    #         print(f"{result.matched_count} record(s) matched. {result.modified_count} record(s) updated.")
+    #     except Exception as e:
+    #         print(f"Failed to update records: {e}")
+    def update_records(self, query, update_values, database, collection):
         """
         Update records in the collection based on a query.
         """
         try:
-            database_name = database
-            collection_name = collection
-            db = self.client[database_name]
-            collection = db[collection_name]
-            result = collection.update_many(query, {"$set": update_values})
+            db = self.client[database]
+            col = db[collection]
+
+            # Apply update_values AS-IS
+            result = col.update_many(query, update_values)
+
             print(f"{result.matched_count} record(s) matched. {result.modified_count} record(s) updated.")
         except Exception as e:
             print(f"Failed to update records: {e}")
