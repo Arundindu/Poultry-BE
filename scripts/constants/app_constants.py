@@ -47,6 +47,8 @@ class UserManagement:
     set_user_role_page_data = '/setUserRolePageData'
     push_notification = '/pushNotification'
     store_subscription = '/storeSubscription'
+    public_data = '/publicData'
+
 
     # SettingsTabDelete
     delete_settings_tab_details = '/deleteSettingsTabDetails'

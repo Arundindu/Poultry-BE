@@ -417,7 +417,7 @@ class TabManagement:
             json_object['tableData']['actions']=(header[0]['birdsPriceTableContent']['actions'])
             if data:
                 mongo_data = data
-                for each_data in mongo_data:
+                for each_data in reversed(mongo_data):
                     del each_data['_id']
                     json_object['tableData']['bodyContent'].append(each_data)
             json_object['status'] = 'success'
@@ -425,6 +425,36 @@ class TabManagement:
         except Exception as e:
             log.error("Error occurred while adding tab details due to " + str(e))
         return json_object
+
+
+    def public_data(self, request_data):
+        json_object = {'status': 'failed', 'message': 'Error Occurred while fetching table data', 'marquee':{}, 'tableData':{'headerContent':[],'bodyContent':[],'actions':{}}}
+        try:
+            now = datetime.now()
+            current_month = now.strftime('%m')
+            current_year = now.strftime('%Y')
+            regex_pattern = f"-{current_month}-{current_year}$"
+            mongo_query = {
+                "date": {"$regex": regex_pattern},
+            }
+            data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.BIRD_PRICE_COLLECTION)
+            header = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
+                                           collection=app_configuration.MONGO_TAB_JSON_COLLECTION)
+
+            json_object['tableData']['headerContent'].extend(header[0]['birdsPriceTableContent']['headerContent'])
+            if data:
+                mongo_data = data
+                for each_data in reversed(mongo_data):
+                    del each_data['_id']
+                    json_object['tableData']['bodyContent'].append(each_data)
+            json_object['marquee'] = json_object['tableData']['bodyContent'][0]
+            json_object['status'] = 'success'
+            json_object['message'] = 'Table data fetched Successfully'
+        except Exception as e:
+            log.error("Error occurred while adding tab details due to " + str(e))
+        return json_object
+
 
     def chick_price(self, request_data):
         json_object = {'status': 'failed', 'message': 'Error Occurred while fetching tab data'}

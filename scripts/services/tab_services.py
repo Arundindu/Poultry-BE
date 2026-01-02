@@ -378,6 +378,29 @@ async def birds_price_table_data(request: Request):
                                                              'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
                                                              'Access-Control-Allow-Origin': '*'}
 
+
+@TabService.post(app_constants.UserManagement.public_data, tags=["Login Service"])
+async def public_data(request: Request):
+    try:
+        input_data = await request.body()
+        json_string = base64.b64decode(input_data)
+        json_object = json.loads(json_string)
+        response = tab_service.public_data(json_object)
+
+        resp = PlainTextResponse(content=base64.b64encode(json.dumps(response).encode()),
+                                 headers={'Content-Type': 'text/plain; charset=utf-8',
+                                          'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                          'Access-Control-Allow-Origin': '*'})
+        return resp
+
+    except Exception as e:
+        log.error("Exception occurred while adding the user " + str(e))
+        resp = {'status': 'failed'}
+        return base64.b64encode(json.dumps(resp).encode()), {'Content-Type': 'text/plain; charset=utf-8',
+                                                             'Server': "DCSR", 'X-Content-Type-Options': "nosniff",
+                                                             'Access-Control-Allow-Origin': '*'}
+
+
 @TabService.post(app_constants.UserManagement.chick_price_data, tags=["Login Service"])
 async def chick_price_data(request: Request):
     try:
