@@ -166,7 +166,8 @@ class UserManagement:
             data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.BIRD_PRICE_COLLECTION)
             if data:
-                for each_data in data:
+                mongo_data = sorted(data, key=lambda x: datetime.strptime(x['date'], "%d-%m-%Y"))
+                for each_data in mongo_data:
                     json_object['data']['date'].append(each_data['date'])
                     json_object['data']['seriesData'].append(each_data['birdsPrice'])
                 json_object['status'] = 'success'

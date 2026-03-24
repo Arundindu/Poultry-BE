@@ -416,9 +416,9 @@ class TabManagement:
             json_object['tableData']['headerContent'].extend(header[0]['birdsPriceTableContent']['headerContent'])
             json_object['tableData']['actions']=(header[0]['birdsPriceTableContent']['actions'])
             if data:
-                mongo_data = data
-                for each_data in reversed(mongo_data):
-                    del each_data['_id']
+                mongo_data = sorted(data, key=lambda x: datetime.strptime(x['date'], "%d-%m-%Y"), reverse=True)
+                for each_data in mongo_data:
+                    each_data.pop('_id', None)
                     json_object['tableData']['bodyContent'].append(each_data)
             json_object['status'] = 'success'
             json_object['message'] = 'Table data fetched Successfully'
@@ -439,16 +439,17 @@ class TabManagement:
             }
             data = mongo_obj.fetch_records(query=mongo_query, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.BIRD_PRICE_COLLECTION)
+            print(data)
             header = mongo_obj.fetch_records(query={}, database=app_configuration.MONGO_DATABASE,
                                            collection=app_configuration.MONGO_TAB_JSON_COLLECTION)
 
             json_object['tableData']['headerContent'].extend(header[0]['birdsPriceTableContent']['headerContent'])
             if data:
-                mongo_data = data
-                for each_data in reversed(mongo_data):
-                    del each_data['_id']
+                mongo_data = sorted(data, key=lambda x: datetime.strptime(x['date'], "%d-%m-%Y"), reverse=True)
+                for each_data in mongo_data:
+                    each_data.pop('_id', None)
                     json_object['tableData']['bodyContent'].append(each_data)
-            json_object['marquee'] = json_object['tableData']['bodyContent'][0]
+                json_object['marquee'] = json_object['tableData']['bodyContent'][0]
             json_object['status'] = 'success'
             json_object['message'] = 'Table data fetched Successfully'
         except Exception as e:
